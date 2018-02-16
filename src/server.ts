@@ -1,10 +1,12 @@
 import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser"; // TODO: Check if needed
+import * as cookieParser from "cookie-parser"; // TODO: Check if needed, cookie handling
 import * as express from "express";
-import * as logger from "morgan";
+import * as logger from "morgan"; // TODO: Check if needed, logging
 import * as path from "path";
 import errorHandler = require("errorhandler");
-import methodOverride = require("method-override"); // TODO: Check if needed
+import methodOverride = require("method-override"); // TODO: Check if needed, used to overwrite `PUT`s and `DELETE`s
+
+import { IndexRoute } from './routes/index';
 
 /**
  * The server.
@@ -64,7 +66,41 @@ export class Server {
    * @method config
    */
   public config() {
-    //empty for now
+    // Path for the user facing stuff
+    this.app.use(express.static(path.join(__dirname, 'public')));
+
+    // Views
+    this.app.set('views', path.join(__dirname, 'views'));
+    this.app.set('view engine', 'pug');
+
+    // use logger middleware
+    // GG, no funca
+    this.app.use(logger("dev"));
+
+    // use json form parser middleware
+    this.app.use(bodyParser.json());
+
+    // use query string parser middleware
+    this.app.use(bodyParser.urlencoded({
+      extended: true
+    }));
+
+    // TODO: Check if needed, cookie handling
+    // use cookie parser middleware
+    this.app.use(cookieParser("SECRET_GOES_HERE"));
+
+    // TODO: Check if needed, used to overwrite `PUT`s and `DELETE`s
+    // use override middleware
+    this.app.use(methodOverride());
+
+    // Catch 404 and forward to error handler
+    this.app.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+      err.status = 404;
+      next(err);
+    });
+
+    // Error handling
+    this.app.use(errorHandler());
   }
 
   /**
@@ -74,7 +110,13 @@ export class Server {
    * @method api
    */
   public routes() {
-    //empty for now
+    let router = express.Router();
+
+    //IndexRoute
+    IndexRoute.create(router);
+
+    //use router middleware
+    this.app.use(router);
   }
 }
 
