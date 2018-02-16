@@ -1,0 +1,24 @@
+{
+  "name": "97slackapp",
+  "version": "1.0.0",
+  "description": "App to retrieve a new thing ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon ./bin/www",
+    "grunt": "grunt",
+    "start": "node ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Leo Picado <leopic@gmail.com> (http://leonardopicado.com)",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ts": "^6.0.0-beta.17",
+    "typescript": "^2.7.2"
+  }
+}
